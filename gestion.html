@@ -562,7 +562,16 @@
             Volver al Inventario
         </a>
     </header>
+    <!-- No se requiere HTML adicional aquí, pero debes modificar el script para que los enlaces de las imágenes se mantengan en todos los dispositivos.
+    Solución: Guarda y carga los productos siempre desde localStorage, incluso en dispositivos nuevos. Así los links de las fotos no desaparecen. 
+    Agrega este bloque justo antes de tu <main> para inicializar correctamente el inventario desde localStorage si existe: -->
 
+    <script>
+        // Si hay productos en localStorage, siempre los usamos (no sobrescribas con predeterminados)
+        if (localStorage.getItem('productosInventario')) {
+            productos = JSON.parse(localStorage.getItem('productosInventario'));
+        }
+    </script>
     <main>
         <h2>Inventario de Productos</h2>
 
@@ -632,24 +641,33 @@
 
         // --- Carga y Guardado de Productos en localStorage ---
         // Intenta cargar productos desde localStorage. Si no hay, usa un conjunto predeterminado.
-        let productos = JSON.parse(localStorage.getItem('productosInventario')) || [
-            // Productos predeterminados para el inventario inicial
-            { id: Date.now() + 1, nombre: 'Mouse Óptico', precio: 15.00, categoria: 'accesorios', DISPONIBLE: 20, urlImagen: 'https://images.unsplash.com/photo-1547944111-ad775089e5a1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 2, nombre: 'Auriculares Gaming', precio: 25.50, categoria: 'accesorios', DISPONIBLE: 15, urlImagen: 'https://images.unsplash.com/photo-1546435770-a3e426bf4722?q=80&w=1465&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 3, nombre: 'Teclado Mecánico', precio: 30.00, categoria: 'accesorios', DISPONIBLE: 10, urlImagen: 'https://images.unsplash.com/photo-1587823555239-01f2f81643c5?q=80&w=1470&auto=format&fit=fit&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 4, nombre: 'Monitor Curvo 27"', precio: 180.00, categoria: 'accesorios', DISPONIBLE: 5, urlImagen: 'https://images.unsplash.com/photo-1579737158379-373981882d27?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 5, nombre: 'Webcam HD', precio: 40.00, categoria: 'accesorios', DISPONIBLE: 25, urlImagen: 'https://images.unsplash.com/photo-1596700055742-12711d99d146?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 6, nombre: 'Impresora Multifuncional', precio: 120.00, categoria: 'accesorios', DISPONIBLE: 8, urlImagen: 'https://images.unsplash.com/photo-1629854284698-f2b7b5c8f1f5?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 7, nombre: 'Laptop Gamer (Intel i5)', precio: 800.00, categoria: 'computadoras', DISPONIBLE: 7, urlImagen: 'https://images.unsplash.com/photo-1593642532454-ee09795e135e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 8, nombre: 'PC Escritorio (Intel i7)', precio: 1000.00, categoria: 'computadoras', DISPONIBLE: 3, urlImagen: 'https://images.unsplash.com/photo-1629910531235-95079a499d1e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 9, nombre: 'Mini PC (AMD Ryzen 3)', precio: 350.00, categoria: 'computadoras', DISPONIBLE: 12, urlImagen: 'https://images.unsplash.com/photo-1630138547378-b57088b9952a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 10, nombre: 'Workstation Profesional', precio: 2200.00, categoria: 'computadoras', DISPONIBLE: 2, urlImagen: 'https://images.unsplash.com/photo-1629910531235-95079a499d1e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 11, nombre: 'Chromebook Ligera', precio: 300.00, categoria: 'computadoras', DISPONIBLE: 9, urlImagen: 'https://images.unsplash.com/photo-1541807056-b8b8b3b3b3b3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            // Nuevos productos de ejemplo para la categoría "componentes"
-            { id: Date.now() + 12, nombre: 'CPU Intel Core i7', precio: 350.00, categoria: 'componentes', DISPONIBLE: 8, urlImagen: 'https://images.unsplash.com/photo-1616886918070-e4d6d3d4b6c3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 13, nombre: 'GPU NVIDIA RTX 3060', precio: 400.00, categoria: 'componentes', DISPONIBLE: 5, urlImagen: 'https://images.unsplash.com/photo-1601264426574-d4d1e2e3f4e2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: Date.now() + 14, nombre: 'Memoria RAM 16GB DDR4', precio: 70.00, categoria: 'componentes', DISPONIBLE: 30, urlImagen: 'https://images.unsplash.com/photo-1591785566089-a2e6b7b2b0c3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
-        ];
+        // Siempre carga los productos desde localStorage si existen, para no perder los links de las fotos
+        let productos;
+        if (localStorage.getItem('productosInventario')) {
+            productos = JSON.parse(localStorage.getItem('productosInventario'));
+        } else {
+            productos = [
+                // Productos predeterminados para el inventario inicial
+                { id: Date.now() + 1, nombre: 'Mouse Óptico', precio: 15.00, categoria: 'accesorios', DISPONIBLE: 20, urlImagen: 'https://images.unsplash.com/photo-1547944111-ad775089e5a1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 2, nombre: 'Auriculares Gaming', precio: 25.50, categoria: 'accesorios', DISPONIBLE: 15, urlImagen: 'https://images.unsplash.com/photo-1546435770-a3e426bf4722?q=80&w=1465&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 3, nombre: 'Teclado Mecánico', precio: 30.00, categoria: 'accesorios', DISPONIBLE: 10, urlImagen: 'https://images.unsplash.com/photo-1587823555239-01f2f81643c5?q=80&w=1470&auto=format&fit=fit&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 4, nombre: 'Monitor Curvo 27"', precio: 180.00, categoria: 'accesorios', DISPONIBLE: 5, urlImagen: 'https://images.unsplash.com/photo-1579737158379-373981882d27?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 5, nombre: 'Webcam HD', precio: 40.00, categoria: 'accesorios', DISPONIBLE: 25, urlImagen: 'https://images.unsplash.com/photo-1596700055742-12711d99d146?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 6, nombre: 'Impresora Multifuncional', precio: 120.00, categoria: 'accesorios', DISPONIBLE: 8, urlImagen: 'https://images.unsplash.com/photo-1629854284698-f2b7b5c8f1f5?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 7, nombre: 'Laptop Gamer (Intel i5)', precio: 800.00, categoria: 'computadoras', DISPONIBLE: 7, urlImagen: 'https://images.unsplash.com/photo-1593642532454-ee09795e135e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 8, nombre: 'PC Escritorio (Intel i7)', precio: 1000.00, categoria: 'computadoras', DISPONIBLE: 3, urlImagen: 'https://images.unsplash.com/photo-1629910531235-95079a499d1e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 9, nombre: 'Mini PC (AMD Ryzen 3)', precio: 350.00, categoria: 'computadoras', DISPONIBLE: 12, urlImagen: 'https://images.unsplash.com/photo-1630138547378-b57088b9952a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 10, nombre: 'Workstation Profesional', precio: 2200.00, categoria: 'computadoras', DISPONIBLE: 2, urlImagen: 'https://images.unsplash.com/photo-1629910531235-95079a499d1e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 11, nombre: 'Chromebook Ligera', precio: 300.00, categoria: 'computadoras', DISPONIBLE: 9, urlImagen: 'https://images.unsplash.com/photo-1541807056-b8b8b3b3b3b3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                // Nuevos productos de ejemplo para la categoría "componentes"
+                { id: Date.now() + 12, nombre: 'CPU Intel Core i7', precio: 350.00, categoria: 'componentes', DISPONIBLE: 8, urlImagen: 'https://images.unsplash.com/photo-1616886918070-e4d6d3d4b6c3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 13, nombre: 'GPU NVIDIA RTX 3060', precio: 400.00, categoria: 'componentes', DISPONIBLE: 5, urlImagen: 'https://images.unsplash.com/photo-1601264426574-d4d1e2e3f4e2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                { id: Date.now() + 14, nombre: 'Memoria RAM 16GB DDR4', precio: 70.00, categoria: 'componentes', DISPONIBLE: 30, urlImagen: 'https://images.unsplash.com/photo-1591785566089-a2e6b7b2b0c3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
+            ];
+            // Solo guarda los productos predeterminados si no hay nada en localStorage
+            productos = productos.map((p, index) => ({ ...p, id: Date.now() + index }));
+            saveProducts();
+        }
 
         // Asegúrate de que los IDs iniciales sean únicos para que no haya conflictos al agregar nuevos
         if (!localStorage.getItem('productosInventario')) {
@@ -908,7 +926,37 @@
             listaComponentesUl.style.display = listaComponentesUl.style.display === 'none' ? 'block' : 'none';
             toggleComponentesBtn.textContent = listaComponentesUl.style.display === 'none' ? 'Mostrar' : 'Ocultar';
         });
+        // --- Selección de imagen local para el producto ---
+        // Crea el input file dinámicamente y lo inserta después del campo URL
+        const imageFileInput = document.createElement('input');
+        imageFileInput.type = 'file';
+        imageFileInput.accept = 'image/*';
+        imageFileInput.id = 'product-image-file';
+        imageFileInput.style.marginBottom = '15px';
+        productImageUrlInput.parentNode.insertBefore(imageFileInput, productImageUrlInput.nextSibling);
 
+        // Al seleccionar una imagen, la convierte a base64 y la pone en el campo URL
+        imageFileInput.addEventListener('change', function () {
+            const file = imageFileInput.files[0];
+            if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                productImageUrlInput.value = e.target.result; // base64
+            };
+            reader.readAsDataURL(file);
+            }
+        });
+
+        // Al editar un producto, limpia el input file
+        function clearImageFileInput() {
+            imageFileInput.value = '';
+        }
+        // Modifica clearForm para limpiar también el input file
+        const originalClearForm = clearForm;
+        clearForm = function () {
+            originalClearForm();
+            clearImageFileInput();
+        };
 
         // --- Inicialización ---
         // Llama a la función para mostrar el inventario cuando la página carga
