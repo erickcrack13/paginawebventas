@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Cliente - KING DISEÑO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================================== */
+        /* SECCIÓN 1: ESTILOS GENERALES Y VIDEO/IMAGEN DE FONDO (AHORA MÁS PLANO) */
+        /* ==================================== */
+
+        /* Estilos generales para el cuerpo de la página */
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            /* Fondo con imagen, pero con un color de superposición más fuerte para un look plano */
+            background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: #ecf0f1; /* Color de texto general para contraste */
+        }
+
+        /* Capa oscura para unificar el fondo y mejorar la legibilidad */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Utilizamos un color plano con mayor opacidad */
+            background: rgba(36, 47, 64, 0.85); /* Azul oscuro plano con opacidad */
+            z-index: -1;
+            /* Puedes añadir el patrón de rejilla sutil aquí también si quieres más consistencia con la home */
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5QzlBOUMiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTAgNDBoMTBWMEgwelYyMGgxMFYwSDB6bTIwIDB2LTUwVjBoMTB2NDhoLTVwem0yMCAwdi01MFYwVjIwSDRweEgtMzB6bS0x十章0VjIwaDEwVjBIMzB6TTUwIDQwdjIwaDMwVjEwSDB6bTUwIDBWMjBIMDQwdi0zMHpWTIwIDBWMjBIMjB6bTIwIDBWMjBIMjB6IiBmaWxsPSIjRkZGRkZGIi8+PC9nfjwvZ2c+PC9zdmc+');
+            background-size: 40px 40px;
+            background-repeat: repeat;
+        }
+
+        /* ==================================== */
+        /* FIN SECCIÓN 1 */
+        /* ==================================== */
+
+
+        /* ==================================== */
+        /* SECCIÓN 2: ESTILOS DEL ENCABEZADO (HEADER) */
+        /* ==================================== */
+        header {
+            /* Usamos un color plano para el header, igual que en la página principal */
+            background: #3498db; /* Azul plano */
+            color: #ffffff;
+            padding: 40px 20px; /* Ajusta el padding para acomodar el botón superior derecho */
+            width: 100%;
+            /* Sombra más sutil y plana */
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            border-bottom-left-radius: 32px;
+            border-bottom-right-radius: 32px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+            z-index: 10;
+            display: flex;
+            flex-direction: column; /* Apila el contenido del header */
+            align-items: center; /* Centra el contenido horizontalmente */
+            justify-content: center; /* Centra el contenido verticalmente */
+            text-align: center; /* Centra el texto del título */
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2em;
+            margin: 0; /* Sin margen inferior por defecto, ya que los botones estarán ocultos */
+            padding-bottom: 30px; /* Se añade padding inferior para separarlo del formulario si los botones están ocultos */
+            text-align: center;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-shadow: none;
+            line-height: 1.1;
+            z-index: 1;
+        }
+
+        .header-buttons-container { /* Nuevo contenedor para los botones de navegación */
+            display: none; /* OCULTAR POR DEFECTO en pantallas pequeñas */
+            flex-wrap: wrap; /* Permite que los botones se ajusten a la siguiente línea */
+            justify-content: center; /* Centra los botones horizontalmente */
+            gap: 10px; /* Reducido el espacio entre botones para que quepan más en una fila */
+            z-index: 20;
+            max-width: 900px; /* Limita el ancho para que no se extiendan demasiado en pantallas muy grandes */
+            width: 100%; /* Asegura que ocupe el ancho disponible para el centrado */
+            margin-top: 20px; /* Espacio superior para separarlo del título */
+        }
+
+        .support-button,
+        .header-button {
+            background: #e67e22; /* Naranja plano */
+            color: #fff;
+            padding: 8px 15px; /* Reducido el padding para que los botones sean más pequeños */
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9em; /* Reducido el tamaño de fuente */
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1); /* Sombra consistente con el ejemplo */
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Reducido el espacio entre el icono y el texto si los hubiera */
+            box-sizing: border-box;
+            white-space: nowrap; /* Evita que el texto se envuelva dentro de los botones */
+            /* flex-grow, flex-basis y max-width se ajustan para el comportamiento de la imagen */
+            flex-grow: 0; /* No crecerán para llenar el espacio */
+            flex-shrink: 1; /* Se encogerán si es necesario */
+            flex-basis: auto; /* El tamaño base se ajusta al contenido */
+            /* Quitado max-width para permitir que el contenido defina el ancho y se ajusten en la fila */
+        }
+
+        /* Regla específica para el botón "Gestionar Inventario" para que aparezca debajo */
+        /* Eliminado el conjunto de reglas vacío para #ir-gestion-btn */
+
+        .support-button:hover,
+        .header-button:hover {
+            background: #d35400; /* Naranja más oscuro al pasar el ratón */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15); /* Sombra más pronunciada al pasar el ratón */
+        }
+        /* ==================================== */
+        /* FIN SECCIÓN 2 */
+        /* ==================================== */
+
+
+        /* ==================================== */
+        /* SECCIÓN 3: ESTILOS DEL FORMULARIO DE ACCESO */
+        /* ==================================== */
+        .auth-container {
+            /* Mantenemos el fondo blanco semitransparente para el contenido principal */
+            background: rgba(255, 255, 255, 0.95); /* Blanco con alta opacidad para un look plano */
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1); /* Sombra plana y consistente */
+            width: 380px;
+            max-width: 90vw;
+            text-align: center;
+            box-sizing: border-box;
+            z-index: 1;
+            position: relative;
+            margin-top: 150px; /* Margen para bajarlo y evitar que el header lo tape */
+            color: #333; /* Color de texto más oscuro para contraste en fondo claro */
+        }
+
+        /* Estilos para el título del formulario */
+        .auth-container h2 {
+            font-family: 'Playfair Display', serif;
+            color: #2c3e50; /* Azul oscuro casi negro, consistente con la home */
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        /* Estilos para las etiquetas de los campos */
+        .auth-container label {
+            display: block;
+            text-align: left;
+            margin-bottom: 10px;
+            color: #2c3e50; /* Consistente con el h2 */
+            font-weight: 600;
+        }
+
+        /* Estilos para los campos de entrada */
+        .auth-container input[type="text"],
+        .auth-container input[type="tel"],
+        .auth-container input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #bdc3c7; /* Gris claro, estilo plano */
+            border-radius: 8px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); /* Sombra interna sutil */
+        }
+
+        /* Estilos para los botones (usando colores planos de la home) */
+        .auth-container button[type="submit"] {
+            background: #3498db; /* Azul plano del header */
+            color: #fff;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.08em;
+            font-weight: 600;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1); /* Sombra plana */
+            transition: background 0.2s, transform 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .auth-container button[type="submit"]:hover {
+            background: #2980b9; /* Azul más oscuro al pasar el ratón */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15); /* Sombra más pronunciada al pasar el ratón */
+        }
+
+        /* Estilos para el mensaje de error */
+        .error-message {
+            color: #e74c3c; /* Rojo plano */
+            margin-top: 15px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        /* Estilos para el botón de alternar entre formularios */
+        .toggle-form-button {
+            background: none;
+            border: none;
+            color: #3498db; /* Azul del header */
+            font-size: 0.95em;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-form-button:hover {
+            color: #2980b9; /* Azul más oscuro al pasar el ratón */
+        }
+
+        /* Estilos para el botón de regreso a la página principal */
+        .back-home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Posicionado a la derecha */
+            background: rgba(255, 255, 255, 0.15); /* Fondo blanco semitransparente */
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+            backdrop-filter: blur(5px);
+            z-index: 200;
+        }
+
+        .back-home-button:hover {
+            background: rgba(255, 255, 255, 0.25); /* Un poco más opaco al pasar el ratón */
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ==================================== */
+        /* FIN SECCIÓN 3 */
+        /* ==================================== */
+
+        /* ==================================== */
+        /* SECCIÓN 4: MEDIA QUERIES (AJUSTES PARA MÓVILES) */
+        /* ==================================== */
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 15px; /* Ajusta el relleno para móviles */
+            }
+
+            header h1 {
+                font-size: 2.5em;
+                /* El margin-bottom de h1 es ya el padding-bottom para separar del formulario */
+                padding-bottom: 0; /* Elimina el padding-bottom cuando los botones no están */
+            }
+
+            .header-buttons-container {
+                display: none; /* Asegura que se oculte en pantallas pequeñas */
+            }
+
+            .back-home-button {
+                top: 15px; /* Ajusta la posición para móviles */
+                right: 15px; /* Ajusta la posición para móviles */
+                padding: 8px 15px;
+                font-size: 0.85em;
+            }
+            .auth-container {
+                margin-top: 120px; /* Ajusta el margen superior para el formulario en móviles */
+            }
+        }
+
+        /* Media query para mostrar los botones en pantallas más grandes */
+        @media (min-width: 769px) {
+            .header-buttons-container {
+                display: flex; /* Muestra los botones en pantallas grandes */
+                /* Ajusta el max-width para forzar el salto de línea del quinto botón si es necesario */
+                max-width: 800px; /* Puedes ajustar este valor */
+            }
+
+            header h1 {
+                margin-bottom: 30px; /* Margen inferior para separar del grupo de botones cuando están visibles */
+                padding-bottom: 0; /* Elimina el padding-bottom del h1 cuando los botones están visibles */
+            }
+
+            .support-button,
+            .header-button {
+                flex-basis: auto; /* Asegura que no se estiren demasiado */
+                min-width: 150px; /* Establece un ancho mínimo para los botones si es necesario */
+                /* No usar max-width aquí para que el flex-wrap funcione mejor si el contenedor se ajusta */
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 2em;
+            }
+            .auth-container {
+                padding: 30px;
+                width: 90vw;
+            }
+            .auth-container h2 {
+                font-size: 1.8em;
+            }
+            .auth-container input {
+                font-size: 1em;
+            }
+            .auth-container button {
+                padding: 12px 24px;
+                font-size: 1em;
+            }
+        }
+        /* ==================================== */
+        /* FIN SECCIÓN 4 */
+        /* ==================================== */
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-home-button">Volver al Inicio</a>
+
+        <h1>Acceso Cliente</h1> <div class="header-buttons-container">
+            <a href="soporte tecnico.html" class="support-button">
+                Soporte Técnico
+            </a>
+            <a id="mostrar-precios" class="header-button" href="index.html">Explorar Productos</a>
+            <a id="mostrar-pago" class="header-button" href="erick.html">metodo de pago</a>
+            <a id="ir-gestion-btn" class="header-button" href="admin_login.html">Gestionar Inventario</a>
+            <a id="admin-login-btn" class="header-button" href="admin_login.html">Acceso Administrativo</a>
+        </div>
+    </header>
+
+    <div class="auth-container">
+        <h2 id="form-title">Acceso Cliente</h2>
+
+        <form id="register-form" style="display: none;">
+            <label for="reg-name">Nombre:</label>
+            <input type="text" id="reg-name" required>
+
+            <label for="reg-cedula">Cédula:</label>
+            <input type="text" id="reg-cedula" pattern="[0-9]{6,10}" title="La cédula debe contener solo números (6 a 10 dígitos)" required>
+
+            <label for="reg-phone">Teléfono:</label>
+            <input type="tel" id="reg-phone" pattern="[0-9]{7,15}" title="El teléfono debe contener solo números (7 a 15 dígitos)" required>
+
+            <label for="reg-password">Contraseña:</label>
+            <input type="password" id="reg-password" required>
+
+            <p id="reg-error-message" class="error-message" style="display: none;"></p>
+            <button type="submit">Registrarme</button>
+            <button type="button" class="toggle-form-button" onclick="showLoginForm()">Ya tengo una cuenta</button>
+        </form>
+
+        <form id="login-form">
+            <label for="login-cedula">Cédula:</label>
+            <input type="text" id="login-cedula" required>
+
+            <label for="login-password">Contraseña:</label>
+            <input type="password" id="login-password" required>
+
+            <p id="login-error-message" class="error-message" style="display: none;">Cédula o contraseña incorrecta. Inténtalo de nuevo.</p>
+            <button type="submit">Iniciar Sesión</button>
+            <button type="button" class="toggle-form-button" onclick="showRegisterForm()">Crear nueva cuenta</button>
+        </form>
+    </div>
+
+    <script>
+        // --- Referencias a Elementos del DOM del formulario de login y registro ---
+        const formTitle = document.getElementById('form-title');
+        const registerForm = document.getElementById('register-form');
+        const loginForm = document.getElementById('login-form');
+
+        // Registro Inputs
+        const regNameInput = document.getElementById('reg-name');
+        const regCedulaInput = document.getElementById('reg-cedula');
+        const regPhoneInput = document.getElementById('reg-phone');
+        const regPasswordInput = document.getElementById('reg-password');
+        const regErrorMessage = document.getElementById('reg-error-message');
+
+        // Login Inputs
+        const loginCedulaInput = document.getElementById('login-cedula');
+        const loginPasswordInput = document.getElementById('login-password');
+        const loginErrorMessage = document.getElementById('login-error-message');
+
+        // --- Funciones para alternar formularios ---
+        function showRegisterForm() {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            formTitle.textContent = 'Registro de Cliente';
+            loginErrorMessage.style.display = 'none'; // Ocultar mensaje de error de login
+        }
+
+        function showLoginForm() {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            formTitle.textContent = 'Acceso Cliente';
+            regErrorMessage.style.display = 'none'; // Ocultar mensaje de error de registro
+        }
+
+        // --- Manejador del Evento de Envío del Formulario de Registro ---
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Previene el recargo de la página
+
+            // Fuerza al navegador a mostrar los mensajes de validación nativos (required, pattern)
+            if (!registerForm.reportValidity()) {
+                regErrorMessage.style.display = 'none'; // Asegurarse de que el mensaje personalizado esté oculto si el nativo se muestra
+                return;
+            }
+
+            const name = regNameInput.value.trim();
+            const cedula = regCedulaInput.value.trim();
+            const phone = regPhoneInput.value.trim();
+            const password = regPasswordInput.value.trim();
+
+            console.log("Intentando registrar:", { name, cedula, phone, password }); // DEBUG
+
+            if (localStorage.getItem(cedula)) {
+                regErrorMessage.textContent = 'Ya existe una cuenta registrada con esta cédula.';
+                regErrorMessage.style.display = 'block';
+                console.log("Error: Cédula ya registrada."); // DEBUG
+                return;
+            }
+
+            // Guardar datos del usuario en localStorage
+            const userData = {
+                name: name,
+                cedula: cedula,
+                phone: phone,
+                password: password // ¡RECUERDA: NO SEGURO PARA PRODUCCIÓN!
+            };
+            localStorage.setItem(cedula, JSON.stringify(userData)); // Usa la cédula como clave
+            console.log("Usuario registrado en localStorage:", userData); // DEBUG
+
+            regErrorMessage.textContent = '¡Registro exitoso! Ahora puedes iniciar sesión.';
+            regErrorMessage.style.color = '#22c55e'; // Verde para éxito
+            regErrorMessage.style.display = 'block';
+
+            // Limpiar campos y cambiar a formulario de login después de un breve retraso
+            setTimeout(() => {
+                regNameInput.value = '';
+                regCedulaInput.value = '';
+                regPhoneInput.value = '';
+                regPasswordInput.value = '';
+                regErrorMessage.style.display = 'none';
+                regErrorMessage.style.color = '#e74c3c'; // Volver al color original
+                showLoginForm();
+            }, 1500);
+        });
+
+        // --- Manejador del Evento de Envío del Formulario de Login ---
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Previene el recargo de la página
+
+            const cedula = loginCedulaInput.value.trim();
+            const password = loginPasswordInput.value.trim();
+
+            console.log("Intentando iniciar sesión con:", { cedula, password }); // DEBUG
+
+            if (!cedula || !password) {
+                loginErrorMessage.textContent = 'Por favor, ingresa tu cédula y contraseña.';
+                loginErrorMessage.style.display = 'block';
+                console.log("Error: Campos de login vacíos."); // DEBUG
+                return;
+            }
+
+            const storedUser = localStorage.getItem(cedula);
+            console.log("Usuario almacenado (localStorage):", storedUser); // DEBUG
+
+            if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                console.log("Datos del usuario recuperados:", userData); // DEBUG
+                console.log("Contraseña ingresada:", password, "Contraseña almacenada:", userData.password); // DEBUG
+
+                if (userData.password === password) {
+                    // Login exitoso
+                    sessionStorage.setItem('clientLoggedIn', 'true');
+                    sessionStorage.setItem('clientCedula', cedula); // Guarda la cédula del usuario loggeado
+                    console.log("Login exitoso. Redirigiendo a:", 'perfil.html'); // DEBUG
+                    window.location.href = 'perfil.html'; // Redirige a la página del cliente (perfil.html)
+                } else {
+                    loginErrorMessage.textContent = 'Cédula o contraseña incorrecta. Inténtalo de nuevo.';
+                    loginErrorMessage.style.display = 'block';
+                    loginPasswordInput.value = ''; // Limpiar contraseña
+                    loginPasswordInput.focus();
+                    console.log("Error: Contraseña incorrecta."); // DEBUG
+                }
+            } else {
+                loginErrorMessage.textContent = 'Cédula no registrada. Por favor, regístrate.';
+                loginErrorMessage.style.display = 'block';
+                loginCedulaInput.value = '';
+                loginPasswordInput.value = '';
+                loginCedulaInput.focus();
+                console.log("Error: Cédula no registrada."); // DEBUG
+            }
+        });
+
+        // Event listeners for header buttons
+        document.getElementById('mostrar-precios').addEventListener('click', function() {
+            window.location.href = './erick 2.html'; // Redirects to the main inventory page
+        });
+
+        document.getElementById('mostrar-pago').addEventListener('click', function() {
+            window.location.href = './erick.html'; // Ensure this is the correct payment page
+        });
+
+        document.getElementById('ir-gestion-btn').addEventListener('click', function() {
+            window.location.href = './acceso_admin.html'; // Redirects to admin login
+        });
+
+        document.getElementById('admin-login-btn').addEventListener('click', function() {
+            window.location.href = './acceso_admin.html';
+        });
+    </script>
+</body>
+</html>

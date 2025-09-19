@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pago</title>
+    <style>
+        /* Estilos CSS para una apariencia más profesional y responsiva */
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background-image: url('https://i.pinimg.com/736x/8f/5f/32/8f5f32f2aa253a0a1948917673058823.jpg');
+            background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+            background-position: center; /* Centra la imagen */
+            background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Asegura que el body ocupe al menos el alto de la vista */
+            color: #333;
+            box-sizing: border-box; /* Incluye padding y border en el ancho/alto total */
+        }
+
+        .formulario-pago {
+            background: rgba(255,255,255,0.95); /* Ligeramente menos transparente */
+            padding: 30px; /* Padding un poco más uniforme */
+            border-radius: 12px; /* Bordes ligeramente más suaves */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra más definida */
+            
+            /* --- Ajustes para el tamaño tipo móvil en PC --- */
+            width: 90vw; /* Ocupa el 90% del ancho del viewport */
+            max-width: 340px; /* Ancho máximo para simular un móvil en PC */
+            /* min-height: 550px;  Opcional: puedes establecer una altura mínima si quieres que sea más "largo" */
+            /* max-height: 90vh; Opcional: para que no se salga de la pantalla verticalmente */
+            overflow-y: auto; /* Permite scroll si el contenido es demasiado largo */
+            /* ------------------------------------------------ */
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Espacio entre elementos del formulario */
+        }
+
+        .botones-cabecera {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px; /* Mayor separación del título */
+            flex-wrap: wrap; /* Permite que los botones se envuelvan en pantallas muy pequeñas */
+            gap: 10px; /* Espacio entre los botones de cabecera si se envuelven */
+        }
+
+        .boton-inicio,
+        .boton-soporte {
+            background: linear-gradient(90deg, #4f8cff 0%, #38d39f 100%);
+            color: #fff;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em; /* Un poco más pequeño para ser más compacto */
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+            white-space: nowrap; /* Evita que el texto del botón se rompa en varias líneas */
+        }
+
+        .boton-soporte {
+            background: linear-gradient(90deg, #f97316 0%, #ea580c 100%);
+            box-shadow: 0 2px 8px rgba(249, 115, 22, 0.08);
+        }
+
+        .boton-inicio:hover {
+            background: linear-gradient(90deg, #38d39f 0%, #4f8cff 100%);
+            box-shadow: 0 4px 16px rgba(56, 211, 159, 0.12);
+        }
+
+        .boton-soporte:hover {
+            background: linear-gradient(90deg, #ea580c 0%, #f97316 100%);
+            box-shadow: 0 4px 16px rgba(234, 88, 12, 0.12);
+        }
+
+        h2 {
+            text-align: center;
+            color: #22223b;
+            margin-bottom: 15px; /* Ajuste de margen */
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            font-size: 1.6em; /* Un poco más grande para mejor impacto */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px; /* Más espacio entre label y input */
+            color: #3a3a3a;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            font-size: 0.95em; /* Tamaño de fuente ligeramente ajustado */
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px; /* Espacio después de cada input/select */
+            border: 1.5px solid #e0e7ff;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background: #f7faff;
+            font-size: 1em;
+            transition: border 0.2s ease, background 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border: 1.5px solid #4f8cff;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.1); /* Ligero glow al enfocar */
+        }
+
+        /* Estilos para los botones de acción principal (Realizar Pago, Cancelar, Agregar al Carrito) */
+        button {
+            background: linear-gradient(90deg, #4f8cff 0%, #38d39f 100%);
+            color: #fff;
+            padding: 12px 20px; /* Padding ajustado para un mejor tamaño */
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
+            width: 100%; /* Ocupan el 100% por defecto para apilarse si es necesario */
+            margin-bottom: 10px; /* Espacio entre botones apilados */
+        }
+
+        /* Estilo específico para el botón de "Cancelar" */
+        button:last-of-type { /* Selecciona el último botón en el formulario */
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffb86b 100%); /* Color de cancelación */
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.08);
+            margin-bottom: 0; /* No necesita margen inferior si es el último */
+        }
+        button:last-of-type:hover {
+            background: linear-gradient(90deg, #ffb86b 0%, #ff6b6b 100%);
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #38d39f 0%, #4f8cff 100%);
+            box-shadow: 0 4px 16px rgba(56, 211, 159, 0.12);
+        }
+
+        .carrito {
+            margin-top: 20px; /* Más espacio superior */
+            padding: 18px; /* Más padding */
+            border: 1.5px solid #e0e7ff;
+            border-radius: 8px;
+            background: #f7faff;
+            box-shadow: 0 1px 4px rgba(60, 72, 88, 0.06);
+        }
+
+        .carrito h3 {
+            margin-top: 0;
+            color: #22223b;
+            font-size: 1.2em; /* Título del carrito ligeramente más grande */
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .carrito ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 12px; /* Espacio después de la lista */
+        }
+
+        .carrito li {
+            padding: 10px 0; /* Más padding para los ítems del carrito */
+            border-bottom: 1px solid #e0e7ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95em; /* Tamaño de fuente ligeramente ajustado */
+            color: #4a4a4a;
+        }
+
+        .carrito li:last-child {
+            border-bottom: none;
+        }
+
+        .carrito p {
+            margin: 6px 0;
+            font-weight: 600;
+            color: #22223b;
+            font-size: 1.05em; /* Total y subtotales un poco más grandes */
+        }
+        .carrito p span {
+            font-weight: 700;
+            color: #0056b3; /* Color distintivo para los valores */
+        }
+
+
+        .eliminar-item {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffb86b 100%);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em; /* Más pequeño para el botón de eliminar */
+            font-weight: 500;
+            transition: background 0.2s ease;
+            margin-left: 10px;
+            white-space: nowrap; /* Evita que el texto se rompa */
+        }
+
+        .eliminar-item:hover {
+            background: linear-gradient(90deg, #ffb86b 0%, #ff6b6b 100%);
+            box-shadow: 0 2px 6px rgba(255, 107, 107, 0.2);
+        }
+
+        .confirmacion-pago {
+            background: linear-gradient(90deg, #d4edda 0%, #e6fffa 100%);
+            color: #155724;
+            border: 1.5px solid #c3e6cb;
+            padding: 20px; /* Más padding para el mensaje de confirmación */
+            margin-top: 25px; /* Más espacio superior */
+            border-radius: 8px;
+            display: none; /* Oculto por defecto */
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(56, 211, 159, 0.08);
+            line-height: 1.5; /* Mejor legibilidad */
+        }
+
+        .confirmacion-pago h3 {
+            margin-top: 0;
+            color: #155724;
+            font-weight: 700;
+            font-size: 1.5em; /* Título de confirmación más grande */
+            margin-bottom: 10px;
+        }
+
+        /* Media Queries para Responsividad */
+        @media (max-width: 480px) {
+            .formulario-pago {
+                padding: 20px; /* Reducir padding en móviles */
+                width: 95vw; /* Ocupa casi todo el ancho disponible */
+                max-width: none; /* Eliminar el max-width para que el 95vw funcione correctamente en móviles */
+            }
+            .botones-cabecera {
+                flex-direction: column; /* Apilar los botones de cabecera */
+                gap: 8px; /* Espacio entre ellos */
+                margin-bottom: 15px;
+            }
+            .boton-inicio, .boton-soporte {
+                width: 100%; /* Que ocupen todo el ancho en móviles */
+                text-align: center;
+            }
+            h2 {
+                font-size: 1.3em; /* Ajuste para móviles */
+                margin-bottom: 12px;
+            }
+            label {
+                font-size: 0.9em;
+            }
+            input[type="text"],
+            input[type="number"],
+            select {
+                padding: 10px; /* Padding un poco menor en inputs */
+                margin-bottom: 12px;
+            }
+            /* Los botones de acción principal ya tienen width: 100% y margin-bottom */
+            button {
+                padding: 10px 15px; /* Ajuste de padding */
+                font-size: 0.95em;
+            }
+            .carrito {
+                padding: 15px; /* Menos padding en carrito */
+                margin-top: 15px;
+            }
+            .carrito h3 {
+                font-size: 1.1em;
+            }
+            .carrito li {
+                font-size: 0.9em;
+                padding: 7px 0;
+            }
+            .carrito p {
+                font-size: 0.95em;
+            }
+            .eliminar-item {
+                padding: 4px 8px;
+                font-size: 0.8em;
+            }
+            .confirmacion-pago {
+                padding: 15px;
+                margin-top: 20px;
+            }
+            .confirmacion-pago h3 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="formulario-pago">
+        <div class="botones-cabecera">
+            <a href="index.html" class="boton-inicio">Inicio</a>
+            <a href="soporte tecnico.html" class="boton-soporte">Soporte Técnico</a>
+        </div>
+
+        <h2>Información del Cliente</h2>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br>
+
+        <label for="cedula">Cédula:</label>
+        <input type="text" id="cedula" name="cedula" required><br>
+
+        <h2>Selección de Productos</h2>
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" name="categoria">
+            <option value="">Seleccione una categoría</option>
+            <option value="accesorios">Accesorios</option>
+            <option value="computadoras">Computadoras</option>
+        </select><br>
+
+        <label for="producto">Producto:</label>
+        <select id="producto" name="producto" disabled>
+            <option value="">Seleccione un producto</option>
+        </select><br>
+
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" value="1" min="1"><br>
+
+        <button onclick="agregarAlCarrito()">Agregar al Carrito</button>
+
+        <div class="carrito">
+            <h3>Carrito de Compras</h3>
+            <ul id="lista-carrito">
+                </ul>
+            <p>Subtotal: <span id="subtotal">0.00</span></p>
+            <p>IVA (Monto BCV): <span id="iva">0.00</span></p>
+            <p>Total a Pagar: <span id="total">0.00</span></p>
+        </div>
+
+        <h2>Pago</h2>
+        <button onclick="realizarPago()">Realizar Pago</button>
+        <button onclick="cancelarPago()">Cancelar</button>
+
+        <div id="mensaje-confirmacion" class="confirmacion-pago">
+            <h3>¡Pago Realizado con Éxito!</h3>
+            <p><span id="nombre-cliente-confirmacion"></span>, gracias por tu compra.</p>
+            <p>Monto pagado: <span id="monto-pagado"></span> USD</p>
+            <p>Productos comprados: <span id="productos-comprados-confirmacion"></span></p>
+            <p>ID de Transacción: <span id="id-transaccion"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // --- Referencias a elementos del DOM ---
+        const categoriaSelect = document.getElementById('categoria');
+        const productoSelect = document.getElementById('producto');
+        const listaCarrito = document.getElementById('lista-carrito');
+        const subtotalSpan = document.getElementById('subtotal');
+        const ivaSpan = document.getElementById('iva');
+        const totalSpan = document.getElementById('total');
+        const mensajeConfirmacion = document.getElementById('mensaje-confirmacion');
+        const montoPagadoSpan = document.getElementById('monto-pagado');
+        const nombreInput = document.getElementById('nombre');
+        const cedulaInput = document.getElementById('cedula');
+        const nombreClienteConfirmacion = document.getElementById('nombre-cliente-confirmacion');
+        const productosCompradosConfirmacion = document.getElementById('productos-comprados-confirmacion');
+        const idTransaccionSpan = document.getElementById('id-transaccion');
+
+        // --- Datos simulados ---
+        let carrito = []; // Almacena los productos en el carrito
+        const productosDisponibles = {
+            accesorios: [
+                { id: 1, nombre: 'Mouse', precio: 15.00, categoria: 'accesorios' },
+                { id: 2, nombre: 'Audífonos', precio: 25.00, categoria: 'accesorios' },
+                { id: 3, nombre: 'Teclado', precio: 30.00, categoria: 'accesorios' },
+                { id: 4, nombre: 'Monitor', precio: 150.00, categoria: 'accesorios' },
+                { id: 5, nombre: 'Webcam', precio: 40.00, categoria: 'accesorios' },
+                { id: 6, nombre: 'Impresora', precio: 200.00, categoria: 'accesorios' }
+            ],
+            computadoras: [
+                { id: 7, nombre: 'Computadora 4ta Gen', precio: 80.00, categoria: 'computadoras' },
+                { id: 8, nombre: 'Computadora 5ta Gen', precio: 100.00, categoria: 'computadoras' },
+                { id: 9, nombre: 'Computadora 6ta Gen', precio: 200.00, categoria: 'computadoras' },
+                { id: 10, nombre: 'Computadora 7ma Gen', precio: 400.00, categoria: 'computadoras' },
+                { id: 11, nombre: 'Computadora 9na Gen', precio: 500.00, categoria: 'computadoras' }
+            ]
+        };
+
+        const tasaIVAVenezuela = 0.05; // 5% de IVA
+
+        // --- Event Listeners ---
+        categoriaSelect.addEventListener('change', cargarProductosPorCategoria);
+
+        // --- Funciones del Carrito ---
+
+        function cargarProductosPorCategoria() {
+            productoSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+            productoSelect.disabled = false;
+            const categoriaSeleccionada = categoriaSelect.value;
+            if (categoriaSeleccionada && productosDisponibles[categoriaSeleccionada]) {
+                productosDisponibles[categoriaSeleccionada].forEach(producto => {
+                    const option = document.createElement('option');
+                    option.value = producto.id;
+                    option.textContent = producto.nombre;
+                    productoSelect.appendChild(option);
+                });
+            } else {
+                productoSelect.disabled = true;
+            }
+        }
+
+        function agregarAlCarrito(productoIdFromURL = null, cantidadFromURL = 1) {
+            let productoId;
+            let cantidad;
+
+            if (productoIdFromURL) {
+                productoId = productoIdFromURL;
+                cantidad = cantidadFromURL;
+            } else {
+                productoId = parseInt(productoSelect.value);
+                cantidad = parseInt(document.getElementById('cantidad').value);
+            }
+            
+            let productoSeleccionado = null;
+
+            // Buscar el producto en todas las categorías si viene de la URL
+            if (productoIdFromURL) {
+                for (const category in productosDisponibles) {
+                    if (productosDisponibles.hasOwnProperty(category)) {
+                        const found = productosDisponibles[category].find(p => p.id === productoId);
+                        if (found) {
+                            productoSeleccionado = found;
+                            // Actualizar el select de categoría para que coincida con el producto encontrado
+                            categoriaSelect.value = category;
+                            cargarProductosPorCategoria(); // Recarga las opciones del select de productos
+                            productoSelect.value = productoId; // Selecciona el producto
+                            break;
+                        }
+                    }
+                }
+            } else { // Si no viene de la URL, se basa en lo seleccionado en los dropdowns
+                const categoriaSeleccionada = categoriaSelect.value;
+                if (categoriaSeleccionada && productosDisponibles[categoriaSeleccionada]) {
+                    productoSeleccionado = productosDisponibles[categoriaSeleccionada].find(p => p.id === productoId);
+                }
+            }
+
+            if (productoSeleccionado && cantidad > 0) {
+                const itemEnCarrito = carrito.find(item => item.id === productoId);
+                if (itemEnCarrito) {
+                    itemEnCarrito.cantidad += cantidad;
+                } else {
+                    carrito.push({ ...productoSeleccionado, cantidad: cantidad });
+                }
+                actualizarCarrito();
+            } else if (!productoIdFromURL) { // Solo muestra la alerta si se activa por el botón, no por el parámetro de URL
+                alert('Por favor, seleccione una categoría, un producto y una cantidad válida.');
+            }
+        }
+
+
+        function actualizarCarrito() {
+            listaCarrito.innerHTML = '';
+            let subtotalCalculado = 0; // Cambiado para evitar confusión con el span
+            carrito.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}`;
+                const botonEliminar = document.createElement('button');
+                botonEliminar.textContent = 'Eliminar';
+                botonEliminar.classList.add('eliminar-item');
+                botonEliminar.onclick = function() {
+                    eliminarDelCarrito(item.id);
+                };
+                li.appendChild(botonEliminar);
+                listaCarrito.appendChild(li);
+                subtotalCalculado += item.precio * item.cantidad;
+            });
+
+            const ivaCalculado = subtotalCalculado * tasaIVAVenezuela;
+            const totalCalculado = subtotalCalculado + ivaCalculado;
+
+            subtotalSpan.textContent = subtotalCalculado.toFixed(2);
+            ivaSpan.textContent = ivaCalculado.toFixed(2);
+            totalSpan.textContent = totalCalculado.toFixed(2);
+
+            // Guardar el carrito en localStorage cada vez que se actualiza
+            localStorage.setItem('carritoPagos', JSON.stringify(carrito));
+        }
+
+        function eliminarDelCarrito(productoId) {
+            carrito = carrito.filter(item => item.id !== productoId);
+            actualizarCarrito();
+        }
+
+        // --- Funciones de Pago ---
+
+        function realizarPago() {
+            const nombre = nombreInput.value.trim();
+            const cedula = cedulaInput.value.trim();
+
+            if (!nombre || !cedula) {
+                alert('Por favor, complete su nombre y cédula.');
+                return;
+            }
+
+            if (carrito.length === 0) {
+                alert('Su carrito está vacío. Por favor, agregue productos antes de realizar el pago.');
+                return;
+            }
+
+            // Aquí se simularía el envío de datos al servidor de pago
+            const datosCompra = {
+                nombre,
+                cedula,
+                productos: carrito.map(item => ({ nombre: item.nombre, cantidad: item.cantidad, precioUnitario: item.precio })),
+                subtotal: parseFloat(subtotalSpan.textContent),
+                iva: parseFloat(ivaSpan.textContent),
+                total: parseFloat(totalSpan.textContent),
+                fecha: new Date().toLocaleString('es-VE')
+            };
+
+            console.log('Datos de la compra a enviar al "servidor":', datosCompra);
+
+            // Simulación de un proceso de pago asíncrono
+            setTimeout(() => {
+                const pagoExitoso = true; // En un entorno real, esto dependería de la respuesta del servidor
+
+                if (pagoExitoso) {
+                    // Mostrar mensaje de confirmación
+                    mensajeConfirmacion.style.display = 'block';
+                    nombreClienteConfirmacion.textContent = nombre;
+                    montoPagadoSpan.textContent = datosCompra.total.toFixed(2);
+                    productosCompradosConfirmacion.textContent = datosCompra.productos.map(p => `${p.nombre} (x${p.cantidad})`).join(', ');
+                    idTransaccionSpan.textContent = generarIdTransaccion(); // Generar ID de transacción
+
+                    // Guardar los datos de la compra para el historial (simulado con localStorage)
+                    guardarHistorialCompra(datosCompra);
+
+                    // Limpiar el carrito y deshabilitar el formulario
+                    carrito = [];
+                    actualizarCarrito(); // Esto también limpia localStorage.setItem('carritoPagos')
+                    deshabilitarFormulario();
+
+                    // Opcional: Redirigir a una página de inicio o confirmación después de un tiempo
+                    setTimeout(() => {
+                        window.location.href = 'erick 2.html'; // Redirige a tu página principal
+                    }, 5000); // Redirige después de 5 segundos
+                } else {
+                    alert('Hubo un problema al procesar el pago. Por favor, intente nuevamente.');
+                }
+            }, 2000); // Simula un retraso de 2 segundos para el procesamiento
+        }
+
+        function cancelarPago() {
+            if (confirm('¿Está seguro que desea cancelar el pago y vaciar el carrito?')) {
+                carrito = [];
+                actualizarCarrito();
+                nombreInput.value = '';
+                cedulaInput.value = '';
+                categoriaSelect.value = '';
+                cargarProductosPorCategoria(); // Resetea el selector de productos
+                mensajeConfirmacion.style.display = 'none';
+                habilitarFormulario();
+            }
+        }
+
+        function generarIdTransaccion() {
+            return 'TXN-' + Math.random().toString(36).substring(2, 11).toUpperCase();
+        }
+
+        function guardarHistorialCompra(compra) {
+            let historial = JSON.parse(localStorage.getItem('historialCompras') || '[]');
+            historial.push(compra);
+            localStorage.setItem('historialCompras', JSON.stringify(historial));
+            console.log('Compra guardada en historial:', historial);
+        }
+
+        function deshabilitarFormulario() {
+            document.querySelectorAll('.formulario-pago input, .formulario-pago select, .formulario-pago button').forEach(element => {
+                element.disabled = true;
+            });
+            // Habilitar los botones de cabecera para que el usuario pueda navegar
+            document.querySelector('.boton-inicio').disabled = false;
+            document.querySelector('.boton-soporte').disabled = false;
+        }
+
+        function habilitarFormulario() {
+            document.querySelectorAll('.formulario-pago input, .formulario-pago select, .formulario-pago button').forEach(element => {
+                element.disabled = false;
+            });
+            productoSelect.disabled = true; // Deshabilitar inicialmente hasta que se seleccione categoría
+        }
+
+        // --- Inicialización al cargar la página ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar carrito desde localStorage al cargar la página
+            const carritoGuardado = localStorage.getItem('carritoPagos');
+            if (carritoGuardado) {
+                carrito = JSON.parse(carritoGuardado);
+                actualizarCarrito();
+            }
+
+            // --- Lógica para leer parámetros de la URL y añadir al carrito ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const productToBuyName = urlParams.get('product');
+            const productToBuyQty = parseInt(urlParams.get('qty')) || 1;
+
+            if (productToBuyName) {
+                let foundProduct = null;
+                let foundCategoryId = null;
+
+                // Iterar a través de todas las categorías para encontrar el producto
+                for (const categoryKey in productosDisponibles) {
+                    if (productosDisponibles.hasOwnProperty(categoryKey)) {
+                        const categoryProducts = productosDisponibles[categoryKey];
+                        foundProduct = categoryProducts.find(p => p.nombre.toLowerCase() === productToBuyName.toLowerCase());
+                        if (foundProduct) {
+                            foundCategoryId = categoryKey; // Almacena la clave de la categoría
+                            break; // Producto encontrado, sal del bucle
+                        }
+                    }
+                }
+
+                if (foundProduct) {
+                    // Configurar automáticamente los selectores de categoría y producto
+                    categoriaSelect.value = foundCategoryId;
+                    cargarProductosPorCategoria(); // Esto rellena el selector de productos
+                    
+                    // Pequeño retardo para asegurar que las opciones del select se hayan renderizado antes de seleccionarlas
+                    setTimeout(() => {
+                        productoSelect.value = foundProduct.id;
+                        document.getElementById('cantidad').value = productToBuyQty;
+                        agregarAlCarrito(foundProduct.id, productToBuyQty); // Agrega al carrito usando su ID
+                    }, 100); 
+                    
+                } else {
+                    console.warn(`Producto "${productToBuyName}" no encontrado en la base de datos de productos.`);
+                }
+            }
+            
+            habilitarFormulario(); // Asegurarse de que el formulario esté habilitado al cargar
+        });
+    </script>
+</body>
+</html>
